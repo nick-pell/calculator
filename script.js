@@ -19,25 +19,28 @@ function divide(a,b){
 }
 
 function operate(firstNum, secondNum, operator){
-    return operator(firstNum,secondNum);
+    return window[operator](firstNum,secondNum);
 }
+
+
 
 let firstNum;
 let secondNum;
-let operator;
+let operatorID;
+let operatorText;
 let displayValue;
+
 
 
 let display = document.querySelector('.display-container');
 let num = document.createElement('p');
 num.classList.add('display');
-num.textContent = displayValue;
-display.appendChild(num);
 
+
+
+// listen for number presses
 const container = document.querySelector('.number-buttons');
 const buttons = container.querySelectorAll('button');
-
-
 buttons.forEach((button) => {
     
     button.addEventListener('click', () => {
@@ -49,6 +52,8 @@ buttons.forEach((button) => {
 
 });
 
+
+// listen for clear button
 const clear = document.querySelector('#clear');
 clear.addEventListener('click', () => {
     num.textContent = "";
@@ -56,15 +61,37 @@ clear.addEventListener('click', () => {
     displayValue = "";
 });
 
+
+// listen for operation buttons
 const opContainer = document.querySelector('.operation-buttons');
 const opButtons = opContainer.querySelectorAll('button');
 opButtons.forEach((opButton) => {
     
     opButton.addEventListener('click', () => {
-        operator = opButton.id;
+
+        operatorID = opButton.id;
+        operatorText = opButton.textContent;
+
+
         num.textContent += opButton.textContent;
+        displayValue = num.textContent;
         display.appendChild(num);
     });
+});
+
+// listen for equal button
+const equals = document.querySelector('#equals');
+equals.addEventListener('click', () => {
+    
+    let nums = displayValue.split(operatorText);
+    console.log(nums);
+    firstNum = parseInt(nums[0]);
+    secondNum = parseInt(nums[1]);
+    let result = operate(firstNum,secondNum,`${operatorID}`);
+
+    num.textContent = result;
+    display.appendChild(num);
+
 });
 
 
